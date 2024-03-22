@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <link href="style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="schedule.png">
+</head>
+<body>
+    <div id="heading"><h1>Suraj's Kanban Board</h1></div>
+
+    <div class="board-container">
+        <!-- Tasks List -->
+        <div class="board" id="board1">
+            <div class="header">
+                <div class="title-container">
+                    <div class="color"></div>
+                    <div class="title">Tasks List</div>
+                    <div class="task-count"></div>
+                </div>
+                <div class="description">This item hasn't been started</div>
+            </div>
+            
+            <div class="tasks-container">
+                <div class="task" draggable="true"><div class="tsk">Task 1</div></div>
+                <div class="task" draggable="true"><div class="tsk">Task 2</div></div>
+                <div class="task" draggable="true"><div class="tsk">Task 3</div></div>
+                <div class="task" draggable="true"><div class="tsk">Task 1</div></div>
+                <div class="task" draggable="true"><div class="tsk">Task 2</div></div>
+                <div class="task" draggable="true"><div class="tsk">Task 3</div></div>
+            </div>
+            <div title="Add Item">
+                <input class="addItem" type="text" placeholder="+ Add item" >
+            </div>
+        </div>
+
+        <!-- Ready -->
+        <div class="board" id="board2">
+            <div class="header">
+                <div class="title-container">
+                    <div class="color"></div>
+                    <div class="title">Ready</div>
+                    <div class="task-count"></div>
+                </div>
+                <div class="description">This is ready to be picked up</div>
+            </div>
+            <div class="tasks-container">
+                <div class="task" draggable="true"><div class="tsk">Task 4</div></div>
+                <div class="task" draggable="true"><div class="tsk">Task 5</div></div>
+            </div>
+            <div title="Add Item"><input class="addItem" type="text" placeholder="+ Add item" ></div>
+        </div>
+        
+
+        <!-- In Progress -->
+        <div class="board" id="board3">
+            <div class="header">
+                <div class="title-container">
+                    <div class="color"></div>
+                    <div class="title">In Progress</div>
+                    <div class="task-count"></div>
+                </div>
+                <div class="description">This is actively being worked on</div>
+            </div>
+            <div class="tasks-container">
+                <div class="task" draggable="true"><div class="tsk">Task 6</div></div>
+            </div>
+            <div title="Add Item"><input class="addItem" type="text" placeholder="+  Add item" ></div>
+        </div>
+
+        <!-- Done -->
+        <div class="board" id="board4">
+            <div class="header">
+                <div class="title-container">
+                    <div class="color"></div>
+                    <div class="title">Done</div>
+                    <div class="task-count"></div>
+                </div>
+                <div class="description">This has been completed</div>
+            </div>
+            <div class="tasks-container"></div>
+            <div title="Add Item"><input class="addItem" type="text" placeholder="+ Add item" ></div>
+        </div>
+    </div>
+    <script src="util.js"></script>
+    <script src="kanban.js"></script>
+    <script src="AddTodo.js"></script>
+</body>
+</html>
