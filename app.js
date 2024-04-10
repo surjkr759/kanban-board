@@ -38,95 +38,27 @@ const init = () => {
 const addNewBoard = () => {
     const boardContainer = document.getElementById('board-container');
 
-    const newDialogBox = document.createElement('dialog');
-    newDialogBox.setAttribute('class', 'addBoardDialogBox');
-    newDialogBox.setAttribute('id', 'addBoardDialogBox');
+    const newDialogBox = createNewDialogBox();
 
-    const boardDiv = document.createElement('div');
-    boardDiv.setAttribute('class', 'boardDiv');
-    boardDiv.innerHTML = 'New Board';
+    const dialogBoxHeading = createdialogBoxHeading();
+    const hr1 = createHR('hr1');
+    const boardTitle = setNewBoardTitle();
+    const boardTitleInput = createNewBoardTitleInput();
+    const boardDescription = createBoardDescription();
+    const boardDescriptionInput = createNewBoardDescriptionInput();
+    const boardColor = createNewBoardColorParentDiv();
+    const boardColorsContainer = createBoardColorsContainer();
+    setColorsInColorContainer(boardColorsContainer);
+    const hr2 = createHR('hr2');
 
-    const hr1 = document.createElement('hr');
-    hr1.setAttribute('class', 'hr');
-
-
-    const boardTitle = document.createElement('div');
-    boardTitle.setAttribute('class', 'dialogBody');
-    boardTitle.setAttribute('id', 'boardTitle');
-    boardTitle.innerHTML = 'Title';
-
-    const boardTitleInput = document.createElement('input');
-    boardTitleInput.setAttribute('class', 'dialogBodyInput');
-
-    const boardDescription = document.createElement('div');
-    boardDescription.setAttribute('class', 'dialogBody');
-    boardDescription.innerHTML = 'Description';
-
-    const boardDescriptionInput = document.createElement('textarea');
-    boardDescriptionInput.setAttribute('class', 'dialogBodyInput');
-
-    const boardColor = document.createElement('div');
-    boardColor.setAttribute('class', 'dialogBody');
-    boardColor.innerHTML = 'Color';
-
-    const boardColorsContainer = document.createElement('div');
-    boardColorsContainer.setAttribute('class', 'boardColorList');
-
-
-    for(let i=0; i < sampleData.colors.length; i++) {
-        const colorDiv = document.createElement('div');
-        colorDiv.setAttribute('type', 'text');
-        colorDiv.setAttribute('id', i);
-        colorDiv.classList.add('colors');
-        colorDiv.style.border = `2px solid ${sampleData.colors[i]}`;
-        colorDiv.style.backgroundColor = `${sampleData.bgColors[i]}`;
-        colorDiv.addEventListener('click', (e) => fun(e));
-
-        boardColorsContainer.append(colorDiv);
-    }
-
-    const hr2 = document.createElement('hr');
-    hr2.setAttribute('class', 'hr');
-
-
-    const buttonContainer = document.createElement('div');
-    buttonContainer.setAttribute('class', 'buttonContainer');
-
-    const cancelButton = document.createElement('div');
-    cancelButton.setAttribute('class', 'dialogButton');
-    cancelButton.setAttribute('id', 'cancelButton');
-    cancelButton.innerHTML = 'Cancel';
-    cancelButton.addEventListener('click', () => newDialogBox.close());
-
-    const submitButton = document.createElement('div');
-    submitButton.setAttribute('class', 'dialogButton');
-    submitButton.setAttribute('id', 'submitButton');
-    submitButton.innerHTML = 'Submit';
-    submitButton.addEventListener('click', () => {
-        if(boardTitleInput.value.replace(/\s+/g,' ').trim() !== '') {
-            if(boardDescriptionInput.value.replace(/\s+/g,' ').trim() !== '') {
-                if(newBoardColorId !== null) {
-                    createNewBoard(boardTitleInput.value, boardDescriptionInput.value, newBoardColorId);
-                    newDialogBox.close();
-                } else {
-                    alert('Board color must be selected');
-                }
-                
-            } else {
-                alert('Description must not be empty');
-                boardDescriptionInput.value = '';
-            }
-        } else {
-            alert('Title must not be empty');
-            boardTitleInput.value = '';
-        }
-        
-    });
+    const buttonContainer = createButtonContainer();
+    const cancelButton = createCancelButton();
+    const submitButton = createSubmitButton(boardTitleInput, boardDescriptionInput, newDialogBox);
 
     buttonContainer.append(cancelButton);
     buttonContainer.append(submitButton);
     
-    newDialogBox.append(boardDiv);
+    newDialogBox.append(dialogBoxHeading);
     newDialogBox.append(hr1);
     newDialogBox.append(boardTitle);
     newDialogBox.append(boardTitleInput);
@@ -140,7 +72,6 @@ const addNewBoard = () => {
 
     boardContainer.append(newDialogBox);
 
-    // newDialogBox.close();
     newDialogBox.showModal();
 }
 
@@ -179,26 +110,26 @@ const createNewBoard = (boardTitle, boardDescription) => {
 }
 
 const createEmptyBoard = (id) => {
-    const b = document.createElement('div');
+    const b = createElement('div');
     b.setAttribute('id', id);
     b.setAttribute('class', 'board');
     return b;
 }
 
 const createHeader = () => {
-    const header = document.createElement('div');
+    const header = createElement('div');
     header.setAttribute('class', 'header');
     return header;
 }
 
 const createTitleContainer = () => {
-    const titleContainer = document.createElement('div');
+    const titleContainer = createElement('div');
     titleContainer.setAttribute('class', 'title-container');
     return titleContainer;
 }
 
 const selectBoardColor = (id) => {
-    const color = document.createElement('div');
+    const color = createElement('div');
     color.setAttribute('class', 'color');
     color.style.border = `2px solid ${sampleData.colors[id]}`;
     color.style.backgroundColor = `${sampleData.bgColors[id]}`;
@@ -206,14 +137,14 @@ const selectBoardColor = (id) => {
 }
 
 const setBoardTitle = (boardTitle) => {
-    const title = document.createElement('div');
+    const title = createElement('div');
     title.setAttribute('class', 'title');
     title.innerHTML = boardTitle;
     return title;
 }
 
 const createTaskCountContainer = () => {
-    const taskCount = document.createElement('div');
+    const taskCount = createElement('div');
     taskCount.setAttribute('class', 'task-count');
     return taskCount;
 }
@@ -225,7 +156,7 @@ const createBoardTitle = (titleContainer, color, title, taskCount) => {
 }
 
 const createDescription = (boardDescription) => {
-    const description = document.createElement('div');
+    const description = createElement('div');
     description.setAttribute('class', 'description');
     description.innerHTML = boardDescription;
     return description;
@@ -237,19 +168,19 @@ const setHeader = (header, titleContainer, description) => {
 }
 
 const createTasksContainer = () => {
-    const tasksContainer = document.createElement('div');
+    const tasksContainer = createElement('div');
     tasksContainer.setAttribute('class', 'tasks-container');
     return tasksContainer;
 }
 
 const addItemContainer = () => {
-    const addItem = document.createElement('div');
+    const addItem = createElement('div');
     addItem.setAttribute('title', 'Add Item');
     return addItem;
 }
 
 const createInputInAddItem = () => {
-    const input = document.createElement('input');
+    const input = createElement('input');
     input.setAttribute('class', 'addItem');
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', '+ Add item');
@@ -271,7 +202,7 @@ const createTask = (board, tasksContainer) => {
     for(let task of board.tasks) {
         const t = createEmptyTask();
 
-        const child = document.createElement('div');
+        const child = createElement('div');
         child.setAttribute('class', 'tsk');
         child.innerHTML = `${task.name}`;
 
@@ -281,7 +212,7 @@ const createTask = (board, tasksContainer) => {
 }
 
 const createEmptyTask = () => {
-    const t = document.createElement('div');
+    const t = createElement('div');
     t.setAttribute('class', 'task');
     t.setAttribute('draggable', 'true');
     return t;
@@ -289,7 +220,7 @@ const createEmptyTask = () => {
 
 
 const createNewBoardBtn = () => {
-    const newBoardBtn = document.createElement('div');
+    const newBoardBtn = createElement('div');
     newBoardBtn.innerHTML = '+';
     newBoardBtn.setAttribute('class', 'newBoardBtn');
     newBoardBtn.setAttribute('id', 'newBoardBtn');
@@ -299,8 +230,129 @@ const createNewBoardBtn = () => {
     return newBoardBtn;
 }
     
+
+const createNewDialogBox = () => {
+    const newDialogBox = createElement('dialog');
+    newDialogBox.setAttribute('class', 'addBoardDialogBox');
+    newDialogBox.setAttribute('id', 'addBoardDialogBox');
+    return newDialogBox;
+}
     
+const createdialogBoxHeading = () => {
+    const dialogBoxHeading = createElement('div');
+    dialogBoxHeading.setAttribute('class', 'dialogBoxHeading');
+    dialogBoxHeading.innerHTML = 'New Board';
+    return dialogBoxHeading;
+}
+
+const createHR = (hr) => {
+    const el = createElement('hr');
+    el.setAttribute('class', 'hr');
+    el.setAttribute('id', hr);
+    return el;
+}
     
+const setNewBoardTitle = () => {
+    const boardTitle = createElement('div');
+    boardTitle.setAttribute('class', 'dialogBody');
+    boardTitle.setAttribute('id', 'boardTitle');
+    boardTitle.innerHTML = 'Title';
+    return boardTitle;
+}
+
+const createNewBoardTitleInput = () => {
+    const boardTitleInput = createElement('input');
+    boardTitleInput.setAttribute('class', 'dialogBodyInput');
+    return boardTitleInput;
+}
+
+
+const createBoardDescription = () => {
+    const boardDescription = createElement('div');
+    boardDescription.setAttribute('class', 'dialogBody');
+    boardDescription.innerHTML = 'Description';
+    return boardDescription;
+}
+
+const createNewBoardDescriptionInput = () => {
+    const boardDescriptionInput = createElement('textarea');
+    boardDescriptionInput.setAttribute('class', 'dialogBodyInput');
+    return boardDescriptionInput;
+}
+
+const createNewBoardColorParentDiv = () => {
+    const boardColor = createElement('div');
+    boardColor.setAttribute('class', 'dialogBody');
+    boardColor.innerHTML = 'Color';
+    return boardColor;
+}
+const createBoardColorsContainer = () => {
+    const boardColorsContainer = createElement('div');
+    boardColorsContainer.setAttribute('class', 'boardColorList');
+    return boardColorsContainer;
+}
+
+const setColorsInColorContainer = (boardColorsContainer) => {
+    for(let i=0; i < sampleData.colors.length; i++) {
+        const colorDiv = createElement('div');
+        colorDiv.setAttribute('type', 'text');
+        colorDiv.setAttribute('id', i);
+        colorDiv.classList.add('colors');
+        colorDiv.style.border = `2px solid ${sampleData.colors[i]}`;
+        colorDiv.style.backgroundColor = `${sampleData.bgColors[i]}`;
+        colorDiv.addEventListener('click', (e) => fun(e));
+
+        boardColorsContainer.append(colorDiv);
+    }
+}
+
+const createButtonContainer = () => {
+    const buttonContainer = createElement('div');
+    buttonContainer.setAttribute('class', 'buttonContainer');
+    return buttonContainer;
+}
+
+const createCancelButton = () => {
+    const cancelButton = createElement('div');
+    cancelButton.setAttribute('class', 'dialogButton');
+    cancelButton.setAttribute('id', 'cancelButton');
+    cancelButton.innerHTML = 'Cancel';
+    cancelButton.addEventListener('click', () => newDialogBox.close());
+    return cancelButton;
+}
+
+const createSubmitButton = (boardTitleInput, boardDescriptionInput, newDialogBox) => {
+    const submitButton = createElement('div');
+    submitButton.setAttribute('class', 'dialogButton');
+    submitButton.setAttribute('id', 'submitButton');
+    submitButton.innerHTML = 'Submit';
+    submitButton.addEventListener('click', () => {
+        if(boardTitleInput.value.replace(/\s+/g,' ').trim() !== '') {
+            if(boardDescriptionInput.value.replace(/\s+/g,' ').trim() !== '') {
+                if(newBoardColorId !== null) {
+                    createNewBoard(boardTitleInput.value, boardDescriptionInput.value, newBoardColorId);
+                    newDialogBox.close();
+                } else {
+                    alert('Board color must be selected');
+                }
+                
+            } else {
+                alert('Description must not be empty');
+                boardDescriptionInput.value = '';
+            }
+        } else {
+            alert('Title must not be empty');
+            boardTitleInput.value = '';
+        }
+        
+    });
+
+    return submitButton;
+}
+
+const createElement = (x) => {
+    return document.createElement(x);
+}
 
 const fun = (event) => {
     const colors = document.querySelectorAll('.colors');

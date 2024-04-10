@@ -34,5 +34,7 @@ const createNewTask = (value, ref) => {
 
     dragEventListener(taskDiv);
 
+    countTasks();
+
     return taskDiv;
 }
