@@ -1,7 +1,11 @@
-const tasksContainer = document.querySelectorAll('.tasks-container');
-const taskSet = document.querySelectorAll('.task');
+let tasksContainer = document.querySelectorAll('.tasks-container');
+let taskSet = document.querySelectorAll('.task');
+
 
 const countTasks = () => {
+    tasksContainer = document.querySelectorAll('.tasks-container');
+    taskSet = document.querySelectorAll('.task');
+    
     tasksContainer.forEach((container) => {
         const noOfTasks = container.querySelectorAll(".task").length;
         container.parentNode.children[0].children[0].children[2].innerHTML = noOfTasks;
