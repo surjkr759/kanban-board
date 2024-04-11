@@ -8,7 +8,7 @@ const countTasks = () => {
     
     tasksContainer.forEach((container) => {
         const noOfTasks = container.querySelectorAll(".task").length;
-        container.parentNode.children[0].children[0].children[2].innerHTML = noOfTasks;
+        container.parentNode.children[0].children[0].children[0].children[2].innerHTML = noOfTasks;
     })
 }
 

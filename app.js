@@ -7,24 +7,13 @@ const init = () => {
     for(let board of sampleData.boards) {
         const b = createEmptyBoard(`${board.boardId}`);
         
-        const header = createHeader();
-        const titleContainer = createTitleContainer();
-
-        const color = selectBoardColor(board.boardId-1);
-        const title = setBoardTitle(`${board.title}`);
-        const taskCount = createTaskCountContainer();
+        const header = createAndSetBoardTitleDescription((board.boardId-1), `${board.title}`, `${board.description}`);
         
-        createBoardTitle(titleContainer, color, title, taskCount);
-        const description = createDescription(`${board.description}`);
-
-        setHeader(header, titleContainer, description);
         const tasksContainer = createTasksContainer();
 
         createTask(board, tasksContainer);
         
-        const addItem = addItemContainer();
-        const input = createInputInAddItem();
-        appendInputToAddItem(addItem, input);
+        const addItem = createAddItemSection();
     
         appendItemsToBoard(b, header, tasksContainer, addItem);
     
@@ -81,23 +70,11 @@ const createNewBoard = (boardTitle, boardDescription) => {
 
     const b = createEmptyBoard(document.querySelectorAll('.board').length + 1);
 
-    const header = createHeader();
-    const titleContainer = createTitleContainer();
-
-    const color = selectBoardColor(newBoardColorId);
-    const title = setBoardTitle(boardTitle);
-    const taskCount = createTaskCountContainer();
-
-    createBoardTitle(titleContainer, color, title, taskCount);
-    const description = createDescription(boardDescription);
-
-    setHeader(header, titleContainer, description);
+    const header = createAndSetBoardTitleDescription(newBoardColorId, boardTitle, boardDescription);
     
     const tasksContainer = createTasksContainer();
 
-    const addItem = addItemContainer();
-    const input = createInputInAddItem();
-    appendInputToAddItem(addItem, input);
+    const addItem = createAddItemSection();
 
     appendItemsToBoard(b, header, tasksContainer, addItem);
     
@@ -107,6 +84,37 @@ const createNewBoard = (boardTitle, boardDescription) => {
     countTasks();
     taskDragListener();
     boardDragListener();
+}
+
+const createAndSetBoardTitleDescription = (id, t, desc) => {
+    const header = createHeader();
+    const parentTitleContainer = createParentTitleContainer();
+
+    const titleContainer = createTitleContainer();
+    const color = selectBoardColor(id);
+    const title = setBoardTitle(t);
+    const taskCount = createTaskCountContainer();
+    createBoardTitle(titleContainer, color, title, taskCount);
+
+    const threeDotsImgContainer = createThreeDotsImgContainer();
+    const threeDotsImg = createThreeDotsImg();
+    threeDotsImg.setAttribute('src', '/Images/three-dots.svg');
+    threeDotsImg.setAttribute('alt', 'Del');
+    threeDotsImgContainer.append(threeDotsImg);
+
+    parentTitleContainer.append(titleContainer);
+    parentTitleContainer.append(threeDotsImgContainer);
+    const description = createDescription(desc);
+
+    setHeader(header, parentTitleContainer, description);
+    return header;
+}
+
+const createAddItemSection = () => {
+    const addItem = addItemContainer();
+    const input = createInputInAddItem();
+    appendInputToAddItem(addItem, input);
+    return addItem;
 }
 
 const createEmptyBoard = (id) => {
@@ -122,10 +130,28 @@ const createHeader = () => {
     return header;
 }
 
+const createParentTitleContainer = () => {
+    const parentTitleContainer = createElement('div');
+    parentTitleContainer.setAttribute('class', 'parent-title-container');
+    return parentTitleContainer;
+}
+
 const createTitleContainer = () => {
     const titleContainer = createElement('div');
     titleContainer.setAttribute('class', 'title-container');
     return titleContainer;
+}
+
+const createThreeDotsImgContainer = () => {
+    const threeDotsImgContainer = createElement('div');
+    threeDotsImgContainer.setAttribute('class', 'threeDotsImagecontainer');
+    return threeDotsImgContainer;
+}
+
+const createThreeDotsImg = () => {
+    const threeDotsImg = createElement('img');
+    threeDotsImg.setAttribute('class', 'threeDotsImg');
+    return threeDotsImg;
 }
 
 const selectBoardColor = (id) => {

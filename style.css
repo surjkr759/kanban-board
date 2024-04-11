@@ -79,8 +79,25 @@ body {
     gap: 5px;
 }
 
+.parent-title-container {
+    display: flex;
+    justify-content: space-between;
+}
+
 .title-container {
     display: flex;
+}
+
+.threeDotsImagecontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.threeDotsImg {
+    height: 15px;
+    width: 25px;
 }
 
 .title {
