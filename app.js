@@ -115,10 +115,6 @@ const createAndSetBoardTitleDescription = (id, t, desc) => {
 }
 
 const createAndSetThreeDotsImg = () => {
-    const boardContainer = document.getElementById('board-container');
-    const totatlBoardsCount = boardContainer.childElementCount;
-    console.log(totatlBoardsCount);
-    // console.log(boardContainer.children[totatlBoardsCount]);
     const threeDotsImg = createThreeDotsImg();
     threeDotsImg.setAttribute('src', '/Images/three-dots.svg');
     threeDotsImg.setAttribute('alt', 'Del');
@@ -137,6 +133,7 @@ const createAndSetThreeDotsImg = () => {
         }
 
         document.body.appendChild(menu);
+        // document.body.children[1].children[id].children[0].children[0].children[1].appendChild(menu);
     })
     return threeDotsImg;
 }
@@ -178,7 +175,7 @@ const createDeleteOption = () => {
 
 const calcMenuPos = (threeDotsImg, menu) => {
     const rect = threeDotsImg.getBoundingClientRect();
-    menu.style.position = 'absolute';
+    menu.style.position = 'fixed';
     menu.style.top = (rect.bottom-13) + 'px';
     menu.style.left = (rect.left-50) + 'px';
 }
@@ -220,13 +217,14 @@ const createTitleContainer = () => {
 const createThreeDotsImgContainer = () => {
     const threeDotsImgContainer = createElement('div');
     threeDotsImgContainer.setAttribute('class', 'threeDotsImagecontainer');
-    threeDotsImgContainer.setAttribute('id', 'threeDotsImagecontainer');
+    threeDotsImgContainer.setAttribute('id', 'threeDotsImagecontainer'+document.querySelectorAll('.board').length);
     return threeDotsImgContainer;
 }
 
 const createThreeDotsImg = () => {
     const threeDotsImg = createElement('img');
     threeDotsImg.setAttribute('class', 'threeDotsImg');
+    threeDotsImg.setAttribute('id', 'threeDotsImg');
     return threeDotsImg;
 }
 
