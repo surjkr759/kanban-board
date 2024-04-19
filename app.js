@@ -1,5 +1,4 @@
 import sampleData from "./data/data.js";
-// console.log(sampleData.boards.length);
 let newBoardColorId = null;
 
 const init = () => {
@@ -22,6 +21,13 @@ const init = () => {
 
     const newBoardBtn = createNewBoardBtn();
     boardContainer.append(newBoardBtn);
+
+    document.body.addEventListener('click', (event) => {
+        const menu = document.querySelector('.menu');
+        if (menu && !menu.contains(event.target)) {
+            menu.remove();
+        }
+    });
 }
 
 const addNewBoard = () => {
@@ -97,9 +103,7 @@ const createAndSetBoardTitleDescription = (id, t, desc) => {
     createBoardTitle(titleContainer, color, title, taskCount);
 
     const threeDotsImgContainer = createThreeDotsImgContainer();
-    const threeDotsImg = createThreeDotsImg();
-    threeDotsImg.setAttribute('src', '/Images/three-dots.svg');
-    threeDotsImg.setAttribute('alt', 'Del');
+    const threeDotsImg = createAndSetThreeDotsImg();
     threeDotsImgContainer.append(threeDotsImg);
 
     parentTitleContainer.append(titleContainer);
@@ -108,6 +112,75 @@ const createAndSetBoardTitleDescription = (id, t, desc) => {
 
     setHeader(header, parentTitleContainer, description);
     return header;
+}
+
+const createAndSetThreeDotsImg = () => {
+    const boardContainer = document.getElementById('board-container');
+    const totatlBoardsCount = boardContainer.childElementCount;
+    console.log(totatlBoardsCount);
+    // console.log(boardContainer.children[totatlBoardsCount]);
+    const threeDotsImg = createThreeDotsImg();
+    threeDotsImg.setAttribute('src', '/Images/three-dots.svg');
+    threeDotsImg.setAttribute('alt', 'Del');
+    threeDotsImg.addEventListener('click', (event) => {
+        event.stopPropagation();
+
+        const menu = createContextMenu();
+
+        // Calculate position for menu
+        calcMenuPos(threeDotsImg, menu);
+
+        // Ensure there's only one menu at a time
+        const existingMenu = document.querySelector('.menu');
+        if (existingMenu) {
+            existingMenu.remove();
+        }
+
+        document.body.appendChild(menu);
+    })
+    return threeDotsImg;
+}
+
+const createContextMenu = () => {
+    const menu = document.createElement('ul');
+    menu.classList.add('menu');
+
+    const editOption = createEditOption();
+    const deleteOption = createDeleteOption();
+
+    menu.appendChild(editOption);
+    menu.appendChild(deleteOption);
+
+    return menu;
+}
+
+const createEditOption = () => {
+    const editOption = document.createElement('li');
+    editOption.setAttribute('class', 'edit');
+    editOption.textContent = 'Edit';
+    editOption.addEventListener('click', () => {
+        // Handle edit action
+        console.log('Edit option clicked');
+    });
+    return editOption;
+}
+
+const createDeleteOption = () => {
+    const deleteOption = document.createElement('li');
+    deleteOption.setAttribute('class', 'delete');
+    deleteOption.textContent = 'Delete';
+    deleteOption.addEventListener('click', () => {
+        // Handle edit action
+        console.log('Delete option clicked');
+    });
+    return deleteOption;
+}
+
+const calcMenuPos = (threeDotsImg, menu) => {
+    const rect = threeDotsImg.getBoundingClientRect();
+    menu.style.position = 'absolute';
+    menu.style.top = (rect.bottom-13) + 'px';
+    menu.style.left = (rect.left-50) + 'px';
 }
 
 const createAddItemSection = () => {
@@ -133,18 +206,21 @@ const createHeader = () => {
 const createParentTitleContainer = () => {
     const parentTitleContainer = createElement('div');
     parentTitleContainer.setAttribute('class', 'parent-title-container');
+    parentTitleContainer.setAttribute('id', 'parentTitleContainer');
     return parentTitleContainer;
 }
 
 const createTitleContainer = () => {
     const titleContainer = createElement('div');
     titleContainer.setAttribute('class', 'title-container');
+    titleContainer.setAttribute('id', 'titleContainer');
     return titleContainer;
 }
 
 const createThreeDotsImgContainer = () => {
     const threeDotsImgContainer = createElement('div');
     threeDotsImgContainer.setAttribute('class', 'threeDotsImagecontainer');
+    threeDotsImgContainer.setAttribute('id', 'threeDotsImagecontainer');
     return threeDotsImgContainer;
 }
 

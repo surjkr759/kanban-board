@@ -222,3 +222,30 @@ body {
 #submitButton {
     background-color: rgb(85, 196, 85);
 }
+
+.menu {
+    list-style: none;
+    width: 40px;
+    border: 1px dotted black;
+    background-color: rgba(255, 255, 255, 1);
+    text-align: center;
+    -webkit-box-shadow: -2px 2px 0px 0px rgba(0,0,0,0.08);
+    -moz-box-shadow: -2px 2px 0px 0px rgba(0,0,0,0.08);
+    box-shadow: -2px 2px 0px 0px rgba(0,0,0,0.08);
+}
+
+.edit {
+    position: relative;
+    margin: 5px 0px 4px 0px;
+    right: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.delete {
+    position: relative;
+    margin: 4px 0px 5px 0px;
+    right: 20px;
+    text-align: center;
+    cursor: pointer;
+}
