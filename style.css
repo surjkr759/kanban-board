@@ -166,6 +166,15 @@ body {
 
 }
 
+.editBoardDialogBox {
+    width: 270px;
+    min-height: 270px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding: 13px 18px;
+}
+
 .dialogBoxHeading {
     font-size: large;
     font-weight: 600;
@@ -220,8 +229,44 @@ body {
     cursor: pointer;
 }
 
+
 #submitButton {
     background-color: rgb(85, 196, 85);
+}
+
+
+.warningDialogBoxButtons {
+    border: 1px dotted black;
+    padding: 4px 7px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 50px;
+    text-align: center;
+    transform: translateX(-12px);
+}
+
+.noButton {
+    background-color: rgb(250, 221, 221);
+    margin-left: 5px;
+}
+
+
+.warningDialogBox {
+    width: 350px;
+    min-height: 100px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding: 13px 18px;
+}
+
+.warningDialogBoxHeading {
+    text-align: center;
+    margin-top: 12px;
+    font-size: large;
+    font-weight: 600;
 }
 
 .menu {
