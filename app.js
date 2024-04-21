@@ -93,6 +93,9 @@ const createNewBoard = (boardTitle, boardDescription) => {
     taskDragListener();
     boardDragListener();
     threeDotsFun();
+    
+    const boardColor = `${sampleData.bgColors[newBoardColorId]}`;
+    taskColorChangeonDragover(b, boardColor);
 }
 
 const createAndSetBoardTitleDescription = (id, t, desc) => {
@@ -653,6 +656,29 @@ const createThreeDots = (container) => {
     container.append(threeDotsImg);
 }
 
+const setTasksColor = () => {
+    const totalBoards = document.querySelectorAll('.board');
+    totalBoards.forEach(board => {
+        const boardColor = board.children[0].children[0].children[0].children[0].style.backgroundColor;
+
+        const tasks = board.querySelectorAll('.task');
+        tasks.forEach(task => {
+            task.style.backgroundColor = boardColor;
+        })
+
+        taskColorChangeonDragover(board, boardColor);
+    })
+}
+
+const taskColorChangeonDragover = (board, boardColor) => {
+    board.addEventListener('dragover', () => {
+        console.log('Task dragging over board: ' + board.getAttribute('id'));
+        const draggingTask = document.querySelector('.is-Dragging');
+        draggingTask.style.backgroundColor = boardColor;
+    })
+}
+
 
 init();
 threeDotsFun();
+setTasksColor();

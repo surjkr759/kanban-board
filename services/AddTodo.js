@@ -3,11 +3,13 @@ const countBoards = () => {
 
     add.forEach((addTask) => {
         addTask.addEventListener('keydown', (e) => {
+            const boardColor = e.target.closest('.board').children[0].children[0].children[0].children[0].style.backgroundColor;
+            // console.log(color);
             const key = e.key;
             const value = addTask.value;
             if(key === 'Enter' && value.trim() !== '' && document.activeElement.tagName === 'INPUT') {
                 const ref = addTask.parentNode.parentNode.children[1];
-                const newTask = createNewTask(value, ref);
+                const newTask = createNewTask(value, ref, boardColor);
                 addTask.value = '';
                 createDraft(newTask);
             }
@@ -20,9 +22,10 @@ countBoards();
 
 
 
-const createNewTask = (value, ref) => {
+const createNewTask = (value, ref, boardColor) => {
     const taskDiv = document.createElement('div');
     taskDiv.classList.add('task');
+    taskDiv.style.backgroundColor = boardColor;
     taskDiv.setAttribute('draggable', 'true');
 
     const childTaskDiv = document.createElement('div');
@@ -35,6 +38,7 @@ const createNewTask = (value, ref) => {
     dragEventListener(taskDiv);
 
     countTasks();
+    // setTasksColor();
 
     return taskDiv;
 }
