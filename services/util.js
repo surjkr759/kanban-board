@@ -3,6 +3,7 @@ let taskSet = document.querySelectorAll('.task');
 let taskSubContSet1 = document.querySelectorAll('.taskSubCont1');
 let taskSubContSet2 = document.querySelectorAll('.taskSubCont2');
 
+
 const countTasks = () => {
     tasksContainer = document.querySelectorAll('.tasks-container');
     taskSet = document.querySelectorAll('.task');
@@ -32,12 +33,16 @@ const createDraft = (task) => {
 const dragEventListener = (task) => {
     //Listen to Drag start events
     task.addEventListener('dragstart', () => {
-        task.classList.add('is-Dragging');
+        const draggable = task.getAttribute('draggable');
+        if(draggable)
+            task.classList.add('is-Dragging');
     });
 
     //Listen to Drag end events
     task.addEventListener('dragend', () => {
-        task.classList.remove('is-Dragging');
+        const draggable = task.getAttribute('draggable');
+        if(draggable)
+            task.classList.remove('is-Dragging');
     });
 }
 

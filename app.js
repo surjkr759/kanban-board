@@ -436,15 +436,30 @@ const createAndSetTask = (value, ref) => {
     const childTaskDiv = createChildTask(value);
     taskSubContainer2.appendChild(childTaskDiv);
 
-    const delButton = createTaskContButtons('taskContBtn');
-    const lockButton = createTaskContButtons('taskContBtn');
-    const unlockButton = createTaskContButtons('taskContBtn');
+    const delButton = createTaskContButtons('taskContBtn','delBtnDiv');
+    const lockButton = createTaskContButtons('taskContBtn','lockBtnDiv');
+    const unlockButton = createTaskContButtons('taskContBtn','unlockBtnDiv');
+    unlockButton.style.display = 'none';
 
     const delButtonImg = createTaskContBtnImg('delete.png', 'Delete');
     delButtonImg.addEventListener('click', setDelBtnEventListener);
     delButton.append(delButtonImg);
 
+    const lockButtonImg = createTaskContBtnImg('lock.png', 'Lock');
+    lockButtonImg.addEventListener('click', () => {
+        setLockBtnEventListener(event, lockButton, unlockButton);
+    });
+    lockButton.append(lockButtonImg);
+
+    const unlockButtonImg = createTaskContBtnImg('unlock.png', 'UnLock');
+    unlockButtonImg.addEventListener('click', () => {
+        setUnLockBtnEventListener(event, lockButton, unlockButton);
+    });
+    unlockButton.append(unlockButtonImg);
+
     taskSubContainer3.append(delButton);
+    taskSubContainer3.append(lockButton);
+    taskSubContainer3.append(unlockButton);
 
     taskSubContainer1.appendChild(taskSubContainer2);
     taskSubContainer1.appendChild(taskSubContainer3);
@@ -460,9 +475,10 @@ const createTaskSubCont = (taskSubCont) => {
     return taskSubContainer1;
 }
 
-const createTaskContButtons = (taskContBtn) => {
+const createTaskContButtons = (taskContBtn, id) => {
     const taskContButton = document.createElement('div');
     taskContButton.classList.add(taskContBtn);
+    taskContButton.setAttribute('id', id);
     return taskContButton;
 }
 
@@ -480,11 +496,42 @@ const setDelBtnEventListener = (event) => {
     console.log('Delete Button clicked');
     const task = event.target.closest('.task');
     task.remove();
+    countTasks();
 }
+
+const setLockBtnEventListener = (event, lockButton, unlockButton) => {
+    event.stopPropagation();
+    // const tsk = event.target.closest('.taskSubCont1').children[0].children[1].innerHTML;
+    // console.log('tsk: ' + tsk);
+    lockButton.style.display = 'none';
+    unlockButton.style.display = 'block';
+    event.target.closest('.task').setAttribute('draggable', 'true');
+    event.target.closest('.taskSubCont1').children[0].children[1].setAttribute('contenteditable', 'true');
+    event.target.closest('.taskSubCont1').children[0].children[1].focus();
+
+    // Set the selection range to the end of the content
+    var range = document.createRange();
+    range.selectNodeContents(event.target.closest('.taskSubCont1').children[0].children[1]);
+    range.collapse(false);
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
+const setUnLockBtnEventListener = (event, lockButton, unlockButton) => {
+    event.stopPropagation();
+    unlockButton.style.display = 'none';
+    lockButton.style.display = 'block';
+    event.target.closest('.task').setAttribute('draggable', 'false');
+    event.target.closest('.taskSubCont1').children[0].children[1].setAttribute('contenteditable', 'false');
+}
+
 
 const createChildTask = (val) => {
     const childTaskDiv = document.createElement('div');
     childTaskDiv.classList.add('tsk');
+    // childTaskDiv.setAttribute('onClick', "this.contentEditable='true';");
+    // childTaskDiv.setAttribute('contenteditable', 'true');
     childTaskDiv.innerHTML = val;
     return childTaskDiv;
 }
@@ -511,7 +558,7 @@ const countBoards = () => {
 const createEmptyTask = () => {
     const t = createElement('div');
     t.setAttribute('class', 'task');
-    t.setAttribute('draggable', 'true');
+    t.setAttribute('draggable', 'false');
     return t;
 }
 
