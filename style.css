@@ -11,6 +11,20 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+#searchInput {
+    position: absolute;
+    right: 50px;
+    width: 210px;
+    height: 22px;
+    border-radius: 4px;
+}
+
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
 }
 
 .board-container {
