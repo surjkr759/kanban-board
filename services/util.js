@@ -1,6 +1,7 @@
 let tasksContainer = document.querySelectorAll('.tasks-container');
 let taskSet = document.querySelectorAll('.task');
-
+let taskSubContSet1 = document.querySelectorAll('.taskSubCont1');
+let taskSubContSet2 = document.querySelectorAll('.taskSubCont2');
 
 const countTasks = () => {
     tasksContainer = document.querySelectorAll('.tasks-container');
@@ -13,7 +14,7 @@ const countTasks = () => {
 }
 
 const createDraftBeforeEachTask = () => {
-    taskSet.forEach((task) => {
+    taskSubContSet2.forEach((task) => {
         const div = document.createElement('div');
         div.setAttribute('class', 'draft');
         div.innerHTML = 'Draft';
@@ -38,4 +39,11 @@ const dragEventListener = (task) => {
     task.addEventListener('dragend', () => {
         task.classList.remove('is-Dragging');
     });
+}
+
+const createEmptyTask = () => {
+    const t = createElement('div');
+    t.setAttribute('class', 'task');
+    t.setAttribute('draggable', 'true');
+    return t;
 }

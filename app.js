@@ -162,7 +162,7 @@ const createEditOption = () => {
     editOption.addEventListener('click', (event) => {
         event.stopPropagation();
         // Handle edit action
-        console.log('Edit option clicked');
+       // console.log('Edit option clicked');
         const boardContainer = document.getElementById('board-container');
 
         const newDialogBox = createNewDialogBox('editBoard', 'editBoardDialogBox');
@@ -218,7 +218,7 @@ const createDeleteOption = () => {
         event.stopPropagation();
         // Handle delete action
         const board = event.target.closest('.board');
-        console.log('Board removed: ' + board.getAttribute('id'));
+        //console.log('Board removed: ' + board.getAttribute('id'));
 
         createWarningDialogBox(board);
         // board.remove();
@@ -411,15 +411,101 @@ const appendItemsToBoard = (b, header, tasksContainer, addItem) => {
 
 const createTask = (board, tasksContainer) => {
     for(let task of board.tasks) {
-        const t = createEmptyTask();
-
-        const child = createElement('div');
-        child.setAttribute('class', 'tsk');
-        child.innerHTML = `${task.name}`;
-
-        t.append(child);
-        tasksContainer.append(t);
+        createAndSetTask(`${task.name}`, tasksContainer);
     }
+}
+
+const createNewTask = (value, ref, boardColor) => {
+    const obj = createAndSetTask(value, ref);
+    console.log(obj.val);
+    obj.val.style.backgroundColor = boardColor;
+
+    dragEventListener(obj.val);
+    countTasks();
+
+    return obj.ref;
+}
+
+const createAndSetTask = (value, ref) => {
+    const taskDiv = createEmptyTask();
+
+    const taskSubContainer1 = createTaskSubCont('taskSubCont1');
+    const taskSubContainer2 = createTaskSubCont('taskSubCont2');
+    const taskSubContainer3 = createTaskSubCont('taskSubCont3');
+
+    const childTaskDiv = createChildTask(value);
+    taskSubContainer2.appendChild(childTaskDiv);
+
+    const delButton = createTaskContButtons('taskContBtn');
+    const lockButton = createTaskContButtons('taskContBtn');
+    const unlockButton = createTaskContButtons('taskContBtn');
+
+    const delButtonImg = createTaskContBtnImg('delete.png', 'Delete');
+    delButtonImg.addEventListener('click', setDelBtnEventListener);
+    delButton.append(delButtonImg);
+
+    taskSubContainer3.append(delButton);
+
+    taskSubContainer1.appendChild(taskSubContainer2);
+    taskSubContainer1.appendChild(taskSubContainer3);
+    taskDiv.append(taskSubContainer1);
+    ref.append(taskDiv);
+
+    return {val: taskDiv, ref: taskSubContainer2};
+}
+
+const createTaskSubCont = (taskSubCont) => {
+    const taskSubContainer1 = document.createElement('div');
+    taskSubContainer1.classList.add(taskSubCont);
+    return taskSubContainer1;
+}
+
+const createTaskContButtons = (taskContBtn) => {
+    const taskContButton = document.createElement('div');
+    taskContButton.classList.add(taskContBtn);
+    return taskContButton;
+}
+
+const createTaskContBtnImg = (img, altVal) => {
+    const taskContButtonImg = document.createElement('img');
+    taskContButtonImg.setAttribute('src', `/Images/${img}`);
+    taskContButtonImg.setAttribute('alt', altVal);
+    taskContButtonImg.setAttribute('class', 'img');
+    taskContButtonImg.setAttribute('id', altVal);
+    return taskContButtonImg;
+}
+
+const setDelBtnEventListener = (event) => {
+    event.stopPropagation();
+    console.log('Delete Button clicked');
+    const task = event.target.closest('.task');
+    task.remove();
+}
+
+const createChildTask = (val) => {
+    const childTaskDiv = document.createElement('div');
+    childTaskDiv.classList.add('tsk');
+    childTaskDiv.innerHTML = val;
+    return childTaskDiv;
+}
+
+const countBoards = () => {
+    const add = document.querySelectorAll('.addItem');
+
+    add.forEach((addTask) => {
+        addTask.addEventListener('keydown', (e) => {
+            const boardColor = e.target.closest('.board').children[0].children[0].children[0].children[0].style.backgroundColor;
+            // console.log(color);
+            const key = e.key;
+            const value = addTask.value;
+            if(key === 'Enter' && value.trim() !== '' && document.activeElement.tagName === 'INPUT') {
+                const ref = addTask.parentNode.parentNode.children[1];
+                const newTask = createNewTask(value, ref, boardColor);
+                addTask.value = '';
+                createDraft(newTask);
+            }
+        })
+    })
 }
 
 const createEmptyTask = () => {
@@ -585,7 +671,7 @@ const createAndSetSubmitButtonToModifyBoardTitle = (boardTitleInput, boardDescri
                     // newDialogBox.close();
                     newDialogBox.remove();
                     const menu = document.querySelector('.menu');
-                    console.log('Menu: ' + menu);
+                    //console.log('Menu: ' + menu);
                     if (menu) {
                         menu.remove();
                     }
@@ -610,7 +696,7 @@ const createAndSetSubmitButtonToModifyBoardTitle = (boardTitleInput, boardDescri
 const modifyBoardTitle = (tit, desc, id, e) => {
     e.target.closest('#parentTitleContainer').children[0].children[1].innerHTML = tit;
     e.target.closest('.header').children[1].innerHTML = desc;
-    console.log('Id: ' + `${sampleData.bgColors[id]}`);
+    //console.log('Id: ' + `${sampleData.bgColors[id]}`);
     e.target.closest('#parentTitleContainer').children[0].children[0].style.backgroundColor = `${sampleData.bgColors[id]}`;
     e.target.closest('#parentTitleContainer').children[0].children[0].style.border = `2px solid ${sampleData.colors[id]}`;
 }
@@ -672,7 +758,7 @@ const setTasksColor = () => {
 
 const taskColorChangeonDragover = (board, boardColor) => {
     board.addEventListener('dragover', () => {
-        console.log('Task dragging over board: ' + board.getAttribute('id'));
+        //console.log('Task dragging over board: ' + board.getAttribute('id'));
         const draggingTask = document.querySelector('.is-Dragging');
         draggingTask.style.backgroundColor = boardColor;
     })
@@ -680,5 +766,6 @@ const taskColorChangeonDragover = (board, boardColor) => {
 
 
 init();
+countBoards();
 threeDotsFun();
 setTasksColor();
