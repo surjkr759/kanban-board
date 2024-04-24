@@ -3,7 +3,14 @@ let newBoardColorId = null;
 
 const init = () => {
     const boardContainer = document.getElementById('board-container');
-    for(let board of sampleData.boards) {
+
+    let kanbanBoardData = getDataFromLocalStorage();   //convert string received from local storage to object for further use
+    if(!kanbanBoardData) {
+        localStorage.setItem('kanban', JSON.stringify(sampleData));     //convert object to string before storing back to local storage
+        kanbanBoardData = JSON.parse(localStorage.getItem('kanban'));
+    }
+    
+    for(let board of kanbanBoardData.boards) {
         const b = createEmptyBoard(`${board.boardId}`);
         
         const header = createAndSetBoardTitleDescription((board.boardId-1), `${board.title}`, `${board.description}`);
@@ -75,8 +82,11 @@ const addNewBoard = () => {
 const createNewBoard = (boardTitle, boardDescription) => {
     const boardContainer = document.getElementById('board-container');
     const newBoardBtn = document.getElementById('newBoardBtn');
+    let kanbanBoardData = JSON.parse(localStorage.getItem('kanban')); 
 
-    const b = createEmptyBoard(document.querySelectorAll('.board').length + 1);
+    const boardId = document.querySelectorAll('.board').length + 1;
+    // console.log('Board Id-> ' + boardId);
+    const b = createEmptyBoard(boardId);
 
     const header = createAndSetBoardTitleDescription(newBoardColorId, boardTitle, boardDescription);
     
@@ -88,6 +98,11 @@ const createNewBoard = (boardTitle, boardDescription) => {
     
     boardContainer.insertBefore(b, newBoardBtn);
     
+    const newBoard = convertNewBoardToObj(boardId, `${kanbanBoardData.colors[newBoardColorId]}`, `${kanbanBoardData.bgColors[newBoardColorId]}`, boardTitle, boardDescription);
+    kanbanBoardData.boards.push(newBoard);
+    localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
+    // console.log(JSON.parse(localStorage.getItem('kanban')));
+
     countBoards();
     countTasks();
     taskDragListener();
@@ -97,6 +112,34 @@ const createNewBoard = (boardTitle, boardDescription) => {
     
     const boardColor = `${sampleData.bgColors[newBoardColorId]}`;
     taskColorChangeonDragover(b, boardColor);
+}
+
+const getDataFromLocalStorage = () => {
+    // debugger;
+    let kanbanBoardData = JSON.parse(localStorage.getItem('kanban'));
+    if(kanbanBoardData) return kanbanBoardData;
+    return false;
+}
+
+const convertNewBoardToObj = (id, color, bgColor, tit, desc) => {
+    const newObj = {
+        boardId : id,
+        color : color,
+        bgColor : bgColor,
+        title : tit,
+        description : desc,
+        tasks : [ ]
+    }
+    return newObj;
+}
+
+const convertNewTaskToObj = (id, nm, ord) => {
+    const newObj = {
+        taskId : id,
+        name : nm,
+        order : ord,
+    }
+    return newObj;
 }
 
 const createAndSetBoardTitleDescription = (id, t, desc) => {
@@ -412,14 +455,22 @@ const appendItemsToBoard = (b, header, tasksContainer, addItem) => {
 
 const createTask = (board, tasksContainer) => {
     for(let task of board.tasks) {
-        createAndSetTask(`${task.name}`, tasksContainer);
+        createAndSetTask(`${task.name}`, tasksContainer, `${task.taskId}`);
     }
 }
 
-const createNewTask = (value, ref, boardColor) => {
-    const obj = createAndSetTask(value, ref);
-    console.log(obj.val);
+const createNewTask = (value, ref, boardColor, id, board) => {
+    let kanbanBoardData = JSON.parse(localStorage.getItem('kanban')); 
+
+    const obj = createAndSetTask(value, ref, id);
+    console.log(obj);
     obj.val.style.backgroundColor = boardColor;
+
+    // console.log('Tasks container length: ' + ref.childElementCount);
+    const newTaskObj = convertNewTaskToObj(id, value, ref.childElementCount);
+    kanbanBoardData.boards[board].tasks.push(newTaskObj);
+    localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
+    // console.log(JSON.parse(localStorage.getItem('kanban')));
 
     dragEventListener(obj.val);
     countTasks();
@@ -427,8 +478,8 @@ const createNewTask = (value, ref, boardColor) => {
     return obj.ref;
 }
 
-const createAndSetTask = (value, ref) => {
-    const taskDiv = createEmptyTask();
+const createAndSetTask = (value, ref, id=null) => {
+    const taskDiv = createEmptyTask(id);
 
     const taskSubContainer1 = createTaskSubCont('taskSubCont1');
     const taskSubContainer2 = createTaskSubCont('taskSubCont2');
@@ -547,8 +598,11 @@ const countBoards = () => {
             const key = e.key;
             const value = addTask.value;
             if(key === 'Enter' && value.trim() !== '' && document.activeElement.tagName === 'INPUT') {
-                const ref = addTask.parentNode.parentNode.children[1];
-                const newTask = createNewTask(value, ref, boardColor);
+                const ref = addTask.parentNode.parentNode.children[1];  //tasks-container class item of that board is selected
+                const board = addTask.closest('.board').getAttribute('id').slice(-1) - 1;
+                // console.log('Board: ' + board);
+                const newTaskId = document.querySelectorAll('.task').length + 1;
+                const newTask = createNewTask(value, ref, boardColor, newTaskId, board);
                 addTask.value = '';
                 createDraft(newTask);
             }
@@ -556,9 +610,10 @@ const countBoards = () => {
     })
 }
 
-const createEmptyTask = () => {
+const createEmptyTask = (id) => {
     const t = createElement('div');
     t.setAttribute('class', 'task');
+    t.setAttribute('id', 'task'+id);
     t.setAttribute('draggable', 'false');
     return t;
 }
@@ -844,6 +899,16 @@ const searchTasks = () => {
 }
 
 
+// const setLocalStorageInitiallyFromData = () => {
+//     localStorage.setItem('kanban', JSON.stringify(sampleData));
+//     const kanbanBoard = JSON.parse(localStorage.getItem('kanban'));
+//     // console.log(kanbanBoard.bgColors);
+//     // for(let board of kanbanBoard.boards) {
+//     //     console.log(board.boardId);
+//     // }
+// }
+
+// setLocalStorageInitiallyFromData();
 init();
 countBoards();
 threeDotsFun();
