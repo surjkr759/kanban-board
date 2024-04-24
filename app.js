@@ -93,6 +93,7 @@ const createNewBoard = (boardTitle, boardDescription) => {
     taskDragListener();
     boardDragListener();
     threeDotsFun();
+    searchTasks();
     
     const boardColor = `${sampleData.bgColors[newBoardColorId]}`;
     taskColorChangeonDragover(b, boardColor);
@@ -816,20 +817,16 @@ const searchTasks = () => {
     const totalBoards = document.querySelectorAll('.board');
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('keyup', (e) => {
-        // console.log(e.target.value);
         const val = e.target.value.trim().toLowerCase();
         totalBoards.forEach(board => {
-            // console.log('Board: ' + board.getAttribute('id'));
             const tasks = board.querySelectorAll('.task');
             tasks.forEach(task => {
                 task.style.display = 'block';
-                // console.log('Task: ' + task.innerHTML);
                 const tsk = task.querySelector('.tsk');
                 const origText = tsk.textContent;
                 const taskText = tsk.textContent.toLowerCase();
 
                 const index = taskText.indexOf(val);
-                // console.log('Task Text Index: ' + index);
 
                 if(index !== -1) {
                     const highlightedText = origText.substring(0, index) + '<span class="highlight">' +
