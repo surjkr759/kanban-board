@@ -7,6 +7,7 @@ taskDragListener();
 const boardDragListener = () => {
     tasksContainer.forEach((taskContainer) => {
         taskContainer.addEventListener('dragover', (e) => {
+            // console.log('Origin Board: ' + originBoard.getAttribute('id'));
             const draggingTask = document.querySelector('.is-Dragging');
             const closestElement = findClosestElement(taskContainer, e.clientY);
     
