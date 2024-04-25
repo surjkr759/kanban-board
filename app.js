@@ -802,6 +802,13 @@ const modifyBoardTitle = (tit, desc, id, e) => {
     //console.log('Id: ' + `${sampleData.bgColors[id]}`);
     e.target.closest('#parentTitleContainer').children[0].children[0].style.backgroundColor = `${sampleData.bgColors[id]}`;
     e.target.closest('#parentTitleContainer').children[0].children[0].style.border = `2px solid ${sampleData.colors[id]}`;
+
+    let kanbanBoardData = JSON.parse(localStorage.getItem('kanban')); 
+    const boardId = e.target.closest('.board').getAttribute('id').slice(-1) - 1;
+    // console.log(kanbanBoardData.boards[boardId]);
+    kanbanBoardData.boards[boardId].title = tit;
+    kanbanBoardData.boards[boardId].description = desc;
+    localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
 }
 
 const createSubmitButton = () => {

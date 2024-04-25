@@ -40,7 +40,6 @@ const dragEventListener = (task) => {
         if(draggable) {
             task.classList.add('is-Dragging');
             originBoard = task.closest('.board').getAttribute('id').slice(-1) - 1;
-            // console.log('Origin Board: ' + originBoard.getAttribute('id'));
             let kanbanBoardData = JSON.parse(localStorage.getItem('kanban')); 
             
             const tasksObj = kanbanBoardData.boards[originBoard].tasks;
