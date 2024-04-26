@@ -87,7 +87,8 @@ const createNewBoard = (boardTitle, boardDescription) => {
     // console.log('Board Id-> ' + boardId);
     const b = createEmptyBoard(boardId);
 
-    const header = createAndSetBoardTitleDescription(newBoardColorId, boardTitle, boardDescription);
+    // console.log('ColorId: ' + newBoardColorId);
+    const header = createAndSetBoardTitleDescription(kanbanBoardData.colors[newBoardColorId], kanbanBoardData.bgColors[newBoardColorId], boardTitle, boardDescription);
     
     const tasksContainer = createTasksContainer();
 
@@ -304,6 +305,11 @@ const createNoButton = (newDialogBox) => {
 }
 
 const createYesButton = (board, newDialogBox) => {
+    let kanbanBoardData = JSON.parse(localStorage.getItem('kanban'));
+    const boardId = board.getAttribute('id').slice(5);
+    const boardObj = kanbanBoardData.boards;
+    const findIndex = boardObj.findIndex(b => b.boardId === Number(boardId));
+
     const yesButton = createElement('div');
     yesButton.classList.add('warningDialogBoxButtons');
     // yesButton.classList.add('Button');
@@ -314,6 +320,10 @@ const createYesButton = (board, newDialogBox) => {
         rewrite3DotsContId();
         threeDotsFun();
         newDialogBox.remove();
+        if(findIndex !== -1) {
+            boardObj.splice(findIndex, 1);
+            localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
+        }
     });
     return yesButton;
 }
@@ -576,6 +586,19 @@ const setLockBtnEventListener = (event, lockButton, unlockButton) => {
     var selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
+
+    let kanbanBoardData = JSON.parse(localStorage.getItem('kanban')); 
+    const board = event.target.closest('.board').getAttribute('id').slice(5) - 1;
+    const tasksObj = kanbanBoardData.boards[board].tasks;
+    const taskId = event.target.closest('.task').getAttribute('id').slice(4);
+    const findIndex = tasksObj.findIndex(t => t.taskId === Number(taskId));
+
+    event.target.closest('.taskSubCont1').children[0].children[1].addEventListener('keyup', () => {
+        if(findIndex !== -1) {
+            kanbanBoardData.boards[board].tasks[findIndex].name = event.target.closest('.taskSubCont1').children[0].children[1].textContent;
+            localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
+        }
+    });
 }
 
 const setUnLockBtnEventListener = (event, lockButton, unlockButton) => {
