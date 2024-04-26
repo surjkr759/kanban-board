@@ -12,8 +12,7 @@ const init = () => {
     
     for(let board of kanbanBoardData.boards) {
         const b = createEmptyBoard(`${board.boardId}`);
-        
-        const header = createAndSetBoardTitleDescription((board.boardId-1), `${board.title}`, `${board.description}`);
+        const header = createAndSetBoardTitleDescription(board.color, board.bgColor, `${board.title}`, `${board.description}`);
         
         const tasksContainer = createTasksContainer();
 
@@ -142,12 +141,12 @@ const convertNewTaskToObj = (id, nm, ord) => {
     return newObj;
 }
 
-const createAndSetBoardTitleDescription = (id, t, desc) => {
+const createAndSetBoardTitleDescription = (col, bgCol, t, desc) => {
     const header = createHeader();
     const parentTitleContainer = createParentTitleContainer();
 
     const titleContainer = createTitleContainer();
-    const color = selectBoardColor(id);
+    const color = selectBoardColor(col, bgCol);
     const title = setBoardTitle(t);
     const taskCount = createTaskCountContainer();
     createBoardTitle(titleContainer, color, title, taskCount);
@@ -383,11 +382,11 @@ const createThreeDotsImg = () => {
     return threeDotsImg;
 }
 
-const selectBoardColor = (id) => {
+const selectBoardColor = (col, bgCol) => {
     const color = createElement('div');
     color.setAttribute('class', 'color');
-    color.style.border = `2px solid ${sampleData.colors[id]}`;
-    color.style.backgroundColor = `${sampleData.bgColors[id]}`;
+    color.style.border = `2px solid ${col}`;
+    color.style.backgroundColor = `${bgCol}`;
     return color;
 }
 
@@ -545,8 +544,17 @@ const createTaskContBtnImg = (img, altVal) => {
 
 const setDelBtnEventListener = (event) => {
     event.stopPropagation();
-    console.log('Delete Button clicked');
+    let kanbanBoardData = JSON.parse(localStorage.getItem('kanban')); 
+
+    const board = event.target.closest('.board').getAttribute('id').slice(-1) - 1;
+    const tasksObj = kanbanBoardData.boards[board].tasks;
     const task = event.target.closest('.task');
+    const taskId = task.getAttribute('id').slice(4);
+    const findIndex = tasksObj.findIndex(t => t.taskId === Number(taskId));
+    if(findIndex !== -1) {
+        tasksObj.splice(findIndex, 1);
+        localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
+    }
     task.remove();
     countTasks();
 }
