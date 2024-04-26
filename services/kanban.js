@@ -32,6 +32,7 @@ const findClosestElement = (board, yaxis) => {
 
     tasksInThisBoard.forEach((task) => {
         let top = task.getBoundingClientRect().top;
+        // console.log('Top: ' + top + ', y-axis: ' + yaxis);
         let distance = yaxis - top;
 
         if(distance < 0 && distance > closestDistance) {

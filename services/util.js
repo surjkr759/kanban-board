@@ -43,15 +43,11 @@ const dragEventListener = (task) => {
             let kanbanBoardData = JSON.parse(localStorage.getItem('kanban')); 
             
             const tasksObj = kanbanBoardData.boards[originBoard].tasks;
-            // console.log(tasksObj);
             const taskId = task.getAttribute('id').slice(4);
-            // console.log(taskId);
             const findIndex = tasksObj.findIndex(t => t.taskId === Number(taskId));
             if(findIndex !== -1) {
                 movingTask = tasksObj[findIndex];
                 tasksObj.splice(findIndex, 1);
-                // console.log(tasksObj);
-                // console.log(kanbanBoardData);
                 localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
             }
             
@@ -71,8 +67,32 @@ const dragEventListener = (task) => {
             localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
             // console.log(kanbanBoardData);
         }
-            
+        
+        let i=1;
+        let kanbanBoardData = JSON.parse(localStorage.getItem('kanban')); 
+        const board = task.closest('.board');
+        const boardId = task.closest('.board').getAttribute('id').slice(5) - 1;
+        const tasks = board.querySelectorAll('.task');
+        // console.log(tasksCont);
+        
+        tasks.forEach(t => {
+            const tasksObj = kanbanBoardData.boards[boardId].tasks;
+            const taskId = t.getAttribute('id').slice(4);
+            const findIndex = tasksObj.findIndex(tsk => tsk.taskId === Number(taskId));
+            if(findIndex !== -1) {
+                tasksObj[findIndex].order = i;
+                i++;
+                localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
+            }
+        });
+
+        kanbanBoardData.boards[boardId].tasks.sort(sortByOrder);
+        localStorage.setItem('kanban', JSON.stringify(kanbanBoardData));
     });
+}
+
+const sortByOrder = (obj1, obj2) => {
+    return obj1.order - obj2.order;
 }
 
 const createEmptyTask = () => {
