@@ -998,7 +998,10 @@ const setStarRatingFeature = (starsContainer) => {
         starDiv.setAttribute('id', 'star'+i);
         starDiv.setAttribute('data-value', i);
         starDiv.classList.add('stars');
-        if(storedRatingObj.rating !== null && i <= storedRatingObj.rating )  starDiv.classList.add('filled-golden');
+        if(storedRatingObj !== null && storedRatingObj.rating !== null && i <= storedRatingObj.rating ) {
+            if(storedRatingObj.rating <= 2) starDiv.classList.add('filled-brown');
+            else starDiv.classList.add('filled-golden');
+        }  
         starDiv.innerHTML = "&#9733;";
         starsContainer.append(starDiv);
     }
@@ -1006,7 +1009,7 @@ const setStarRatingFeature = (starsContainer) => {
     ratingDiv.setAttribute('type', 'text');
     ratingDiv.setAttribute('id', 'ratingVal');
     ratingDiv.setAttribute('class', 'ratingVal');
-    if(storedRatingObj.rating  !== null) ratingDiv.innerText = `(${storedRatingObj.rating }/5)`;
+    if(storedRatingObj !== null && storedRatingObj.rating  !== null) ratingDiv.innerText = `(${storedRatingObj.rating }/5)`;
     starsContainer.append(ratingDiv);
 }
 
@@ -1077,8 +1080,8 @@ const createRatingExplanation = () => {
     const ratingExplDiv = createElement('div');
     ratingExplDiv.setAttribute('class', 'ratingExplanation');
     ratingExplDiv.setAttribute('id', 'ratingExplanation');
-    console.log(storedRatingObj);
-    // if(storedRatingObj.details !== '')  ratingExplDiv.innerText = storedRatingObj.details;
+    // console.log(storedRatingObj);
+    if(storedRatingObj !== null && storedRatingObj.details !== '')  ratingExplDiv.innerText = storedRatingObj.details;
     return ratingExplDiv;
 }
 
