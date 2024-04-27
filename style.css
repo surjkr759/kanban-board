@@ -11,7 +11,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: sticky;
+    left: 0px;
 }
 
 #searchInput {
@@ -229,16 +230,32 @@ body {
     padding: 13px 18px;
 }
 
+.setRatingDialogBox {
+    min-width: 470px;
+    min-height: 90px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding: 13px 18px;
+}
+
 .dialogBoxHeading {
     font-size: large;
     font-weight: 600;
 }
+
 
 .hr {
     margin: 10px 0px;
 }
 
 .boardColorList {
+    display: flex;
+    padding: 5px 0px;
+    gap: 10px;
+}
+
+.starsList {
     display: flex;
     padding: 5px 0px;
     gap: 10px;
@@ -348,4 +365,32 @@ body {
     right: 20px;
     text-align: center;
     cursor: pointer;
+}
+
+#rating-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+#rating {
+    height: 35px;
+    width: 120px;
+    border: 1px solid black;
+    border-radius: 8px;
+    text-align: center;
+    align-content: center;
+    font-weight: 500;
+    background-color: gold;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.stars {
+    font-size: 3em;
+}
+
+#ratingDialogBox .dialogBoxHeading {
+    text-align: center;
 }

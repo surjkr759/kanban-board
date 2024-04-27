@@ -662,10 +662,10 @@ const createNewBoardBtn = () => {
 }
     
 
-const createNewDialogBox = (dialogBox, dialogBoxClass) => {
+const createNewDialogBox = (dialogBoxId, dialogBoxClass) => {
     const newDialogBox = createElement('dialog');
     newDialogBox.setAttribute('class', dialogBoxClass);
-    newDialogBox.setAttribute('id', dialogBox);
+    newDialogBox.setAttribute('id', dialogBoxId);
     return newDialogBox;
 }
     
@@ -765,6 +765,15 @@ const createCancelButton = (newDialogBox) => {
     cancelButton.innerHTML = 'Cancel';
     cancelButton.addEventListener('click', () => newDialogBox.remove());
     return cancelButton;
+}
+
+const createCloseButton = (newDialogBox) => {
+    const closeButton = createElement('div');
+    closeButton.setAttribute('class', 'dialogButton');
+    closeButton.setAttribute('id', 'closeButton');
+    closeButton.innerHTML = 'Close';
+    closeButton.addEventListener('click', () => newDialogBox.remove());
+    return closeButton;
 }
 
 const createAndSetSubmitButtonToAddNewBoard = (boardTitleInput, boardDescriptionInput, newDialogBox) => {
@@ -937,18 +946,56 @@ const searchTasks = () => {
 }
 
 
-// const setLocalStorageInitiallyFromData = () => {
-//     localStorage.setItem('kanban', JSON.stringify(sampleData));
-//     const kanbanBoard = JSON.parse(localStorage.getItem('kanban'));
-//     // console.log(kanbanBoard.bgColors);
-//     // for(let board of kanbanBoard.boards) {
-//     //     console.log(board.boardId);
-//     // }
-// }
+const setRatingFeature = () => {
+    const ratingBox = document.getElementById('rating');
+    ratingBox.addEventListener('click', createAndSetRatingDialogBox);
+}
 
-// setLocalStorageInitiallyFromData();
+const createAndSetRatingDialogBox = () => {
+    console.log('Rating clicked');
+    const boardContainer = document.getElementById('board-container');
+    const newDialogBox = createNewDialogBox('ratingDialogBox', 'setRatingDialogBox');
+
+    const dialogBoxHeading = createdialogBoxHeading('How would you rate us?');
+    const starsContainer = createStarsContainer();
+    setStarRatingFeature(starsContainer);
+
+    const buttonContainer = createButtonContainer();
+    const closeButton = createCloseButton(newDialogBox);
+    buttonContainer.append(closeButton);
+
+    newDialogBox.append(dialogBoxHeading);
+    newDialogBox.append(starsContainer);
+    newDialogBox.append(buttonContainer);
+
+    boardContainer.append(newDialogBox);
+    newDialogBox.showModal();
+}
+
+const createStarsContainer = () => {
+    const starsContainer = createElement('div');
+    starsContainer.setAttribute('class', 'starsList');
+    return starsContainer;
+}
+
+const setStarRatingFeature = (starsContainer) => {
+    for(let i=0; i < 5; i++) {
+        const colorDiv = createElement('div');
+        colorDiv.setAttribute('type', 'text');
+        colorDiv.setAttribute('id', 'star'+i);
+        colorDiv.classList.add('stars');
+        colorDiv.innerHTML = "&#9733;";
+        // colorDiv.addEventListener('click', (e) => fun(e));
+
+        
+        starsContainer.append(colorDiv);
+    }
+}
+
+
 init();
 countBoards();
 threeDotsFun();
 setTasksColor();
 searchTasks();
+setRatingFeature();
