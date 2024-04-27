@@ -1,5 +1,6 @@
 import sampleData from "./data/data.js";
 let newBoardColorId = null;
+const ratingExplValue = ['Need lots of improvement', 'Could be better', 'Cool', 'Amazing', 'Just looking like a wow'];
 
 const init = () => {
     const boardContainer = document.getElementById('board-container');
@@ -952,44 +953,129 @@ const setRatingFeature = () => {
 }
 
 const createAndSetRatingDialogBox = () => {
-    console.log('Rating clicked');
     const boardContainer = document.getElementById('board-container');
     const newDialogBox = createNewDialogBox('ratingDialogBox', 'setRatingDialogBox');
 
     const dialogBoxHeading = createdialogBoxHeading('How would you rate us?');
     const starsContainer = createStarsContainer();
+    const ratingExplanation = createRatingExplanation();
     setStarRatingFeature(starsContainer);
 
     const buttonContainer = createButtonContainer();
     const closeButton = createCloseButton(newDialogBox);
+    const submitButton = createSubmitButton();
+
     buttonContainer.append(closeButton);
+    buttonContainer.append(submitButton);
 
     newDialogBox.append(dialogBoxHeading);
     newDialogBox.append(starsContainer);
+    newDialogBox.append(ratingExplanation);
     newDialogBox.append(buttonContainer);
 
     boardContainer.append(newDialogBox);
     newDialogBox.showModal();
+
+    setStarsEventListenerOnClick();
+    setStarsEventListenerOnHover();
+    setSubmitButtonEventListener(newDialogBox);
+
 }
 
 const createStarsContainer = () => {
     const starsContainer = createElement('div');
     starsContainer.setAttribute('class', 'starsList');
+    starsContainer.setAttribute('id', 'starsList');
+    // starsContainer.addEventListener('click', setUnsetColorInStarsCont);
     return starsContainer;
 }
 
 const setStarRatingFeature = (starsContainer) => {
-    for(let i=0; i < 5; i++) {
-        const colorDiv = createElement('div');
-        colorDiv.setAttribute('type', 'text');
-        colorDiv.setAttribute('id', 'star'+i);
-        colorDiv.classList.add('stars');
-        colorDiv.innerHTML = "&#9733;";
-        // colorDiv.addEventListener('click', (e) => fun(e));
-
-        
-        starsContainer.append(colorDiv);
+    let storedRatingObj = JSON.parse(localStorage.getItem('rating'));
+    for(let i=1; i <=5; i++) {
+        const starDiv = createElement('div');
+        starDiv.setAttribute('type', 'text');
+        starDiv.setAttribute('id', 'star'+i);
+        starDiv.setAttribute('data-value', i);
+        starDiv.classList.add('stars');
+        if(storedRatingObj.rating !== null && i <= storedRatingObj.rating )  starDiv.classList.add('filled-golden');
+        starDiv.innerHTML = "&#9733;";
+        starsContainer.append(starDiv);
     }
+    const ratingDiv = createElement('div');
+    ratingDiv.setAttribute('type', 'text');
+    ratingDiv.setAttribute('id', 'ratingVal');
+    ratingDiv.setAttribute('class', 'ratingVal');
+    if(storedRatingObj.rating  !== null) ratingDiv.innerText = `(${storedRatingObj.rating }/5)`;
+    starsContainer.append(ratingDiv);
+}
+
+const setStarsEventListenerOnClick = () => {
+    const stars = document.querySelectorAll('.stars');
+    const starContainer = document.getElementById('starsList');
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            reset();
+            const val = star.getAttribute('data-value');
+            const ratingValue = document.getElementById('ratingVal');
+            ratingValue.innerText = `(${val}/5)`;
+            const ratingExpl = document.getElementById('ratingExplanation');
+            ratingExpl.innerText = ratingExplValue[`${val}`-1];
+            for(let i=1; i <= val; i++) {
+                const el = starContainer.querySelector(`:nth-child(${i})`);
+                if(val <= 2) el.classList.add('filled-brown');
+                else el.classList.add('filled-golden');
+            }
+        })
+    })
+}
+
+function reset() {
+    const stars = document.querySelectorAll('.stars');
+    stars.forEach(star => {
+        star.classList.remove('filled-golden', 'filled-brown');
+    })
+}
+
+const setStarsEventListenerOnHover = () => {
+    const stars = document.querySelectorAll('.stars');
+    const starContainer = document.getElementById('starsList');
+    stars.forEach(star => {
+        star.addEventListener('mouseover', () => {
+            reset();
+            const val = star.getAttribute('data-value');
+            for(let i=1; i <= val; i++) {
+                const el = starContainer.querySelector(`:nth-child(${i})`);
+                if(val <= 2) el.classList.add('filled-brown');
+                else el.classList.add('filled-golden');
+            }
+        })
+    })
+}
+
+const setSubmitButtonEventListener = (newDialogBox) => {
+    const submitButton = document.getElementById('submitButton');
+    
+    submitButton.addEventListener('click', () => {
+        const ratingVal = document.getElementById('ratingVal').innerHTML.charAt(1);
+        const ratingExp = document.getElementById('ratingExplanation').innerHTML
+        if(ratingVal === '') alert('Please provide rating');
+        const ratingObj = {rating: ratingVal, details: ratingExp};
+        localStorage.setItem('rating', JSON.stringify(ratingObj)); 
+        console.log(JSON.parse(localStorage.getItem('rating')));
+        newDialogBox.remove();
+    });
+}
+
+
+const createRatingExplanation = () => {
+    let storedRatingObj = JSON.parse(localStorage.getItem('rating'));
+
+    const ratingExplDiv = createElement('div');
+    ratingExplDiv.setAttribute('class', 'ratingExplanation');
+    ratingExplDiv.setAttribute('id', 'ratingExplanation');
+    if(storedRatingObj.details !== '')  ratingExplDiv.innerText = storedRatingObj.details;
+    return ratingExplDiv;
 }
 
 
