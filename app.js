@@ -1077,7 +1077,8 @@ const createRatingExplanation = () => {
     const ratingExplDiv = createElement('div');
     ratingExplDiv.setAttribute('class', 'ratingExplanation');
     ratingExplDiv.setAttribute('id', 'ratingExplanation');
-    if(storedRatingObj.details !== '')  ratingExplDiv.innerText = storedRatingObj.details;
+    console.log(storedRatingObj.details);
+    // if(storedRatingObj.details !== '')  ratingExplDiv.innerText = storedRatingObj.details;
     return ratingExplDiv;
 }
 
