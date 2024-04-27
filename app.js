@@ -986,7 +986,7 @@ const createStarsContainer = () => {
     const starsContainer = createElement('div');
     starsContainer.setAttribute('class', 'starsList');
     starsContainer.setAttribute('id', 'starsList');
-    // starsContainer.addEventListener('click', setUnsetColorInStarsCont);
+    starsContainer.addEventListener('click', setUnsetColorInStarsCont);
     return starsContainer;
 }
 
@@ -1021,16 +1021,17 @@ const setStarsEventListenerOnClick = () => {
             ratingValue.innerText = `(${val}/5)`;
             const ratingExpl = document.getElementById('ratingExplanation');
             ratingExpl.innerText = ratingExplValue[`${val}`-1];
-            for(let i=1; i <= val; i++) {
-                const el = starContainer.querySelector(`:nth-child(${i})`);
-                if(val <= 2) el.classList.add('filled-brown');
-                else el.classList.add('filled-golden');
-            }
+            
+            renderStars(val, starContainer);
         })
     })
 }
 
-function reset() {
+const setUnsetColorInStarsCont = (e) => {
+    console.log('Target: ' + e.target);
+}
+
+const reset = () => {
     const stars = document.querySelectorAll('.stars');
     stars.forEach(star => {
         star.classList.remove('filled-golden', 'filled-brown');
@@ -1044,13 +1045,18 @@ const setStarsEventListenerOnHover = () => {
         star.addEventListener('mouseover', () => {
             reset();
             const val = star.getAttribute('data-value');
-            for(let i=1; i <= val; i++) {
-                const el = starContainer.querySelector(`:nth-child(${i})`);
-                if(val <= 2) el.classList.add('filled-brown');
-                else el.classList.add('filled-golden');
-            }
+            
+            renderStars(val, starContainer);
         })
     })
+}
+
+const renderStars = (val, starContainer) => {
+    for(let i=1; i <= val; i++) {
+        const el = starContainer.querySelector(`:nth-child(${i})`);
+        if(val <= 2) el.classList.add('filled-brown');
+        else el.classList.add('filled-golden');
+    }
 }
 
 const setSubmitButtonEventListener = (newDialogBox) => {
