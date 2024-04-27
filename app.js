@@ -986,7 +986,7 @@ const createStarsContainer = () => {
     const starsContainer = createElement('div');
     starsContainer.setAttribute('class', 'starsList');
     starsContainer.setAttribute('id', 'starsList');
-    starsContainer.addEventListener('click', setUnsetColorInStarsCont);
+    // starsContainer.addEventListener('click', setUnsetColorInStarsCont);
     return starsContainer;
 }
 
@@ -1027,9 +1027,6 @@ const setStarsEventListenerOnClick = () => {
     })
 }
 
-const setUnsetColorInStarsCont = (e) => {
-    console.log('Target: ' + e.target);
-}
 
 const reset = () => {
     const stars = document.querySelectorAll('.stars');
